@@ -9,7 +9,7 @@ COMPARE_BRANCH="develop"
 INFER_OUT="$SDK_ROOT/infer-out"
 
 if [ "$CI" == "true" ]; then
-    CURRENT_BRANCH="$TRAVIS_BRANCH"
+    CURRENT_BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
     git branch $CURRENT_BRANCH
     git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
     git fetch origin $COMPARE_BRANCH
