@@ -19,7 +19,7 @@ fi
 cd $GRADLE_PATH
 ./gradlew clean
 cd $SDK_ROOT
-git diff --name-only $COMPARE_BRANCH > index.txt
+git diff --name-only origin/$COMPARE_BRANCH > index.txt
 echo "Changed files"
 cat index.txt
 echo "Analyze branch ${CURRENT_BRANCH}"
