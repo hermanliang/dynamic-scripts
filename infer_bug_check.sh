@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     exit 0
 fi
 
@@ -8,7 +8,7 @@ CURRENT_BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
 COMPARE_BRANCH="develop"
 INFER_OUT="$SDK_ROOT/infer-out"
 
-if [[ "$CI" == "true" ]]; then
+if [ "$CI" == "true" ]; then
     CURRENT_BRANCH="$TRAVIS_BRANCH"
     git branch $CURRENT_BRANCH
     git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
