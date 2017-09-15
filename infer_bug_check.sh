@@ -2,7 +2,7 @@
 
 env
 
-if [[ "$TRAVIS_PULL_REQUEST" == "false" || "$TRAVIS_OS_NAME" == "osx" ]]; then
+if [[ "$TRAVIS_PULL_REQUEST" == "false" || "$TRAVIS_OS_NAME" == "linux" ]]; then
     exit 0
 fi
 
