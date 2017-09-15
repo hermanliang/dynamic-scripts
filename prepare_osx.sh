@@ -1,5 +1,6 @@
 #!/bin/bash
 
+brew update
 brew tap caskroom/cask
 brew cask install android-sdk
 eval echo \"y\" | android update sdk --no-ui --force --all --filter extra-google-m2repository || true
