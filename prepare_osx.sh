@@ -10,5 +10,5 @@ chmod +x android-sdk-installer
 ./android-sdk-installer --install=$COMPONENTS --accept=$LICENSES
 source ~/.android-sdk-installer/env
 
-brew update
-brew install infer
+# brew update
+# brew install infer
