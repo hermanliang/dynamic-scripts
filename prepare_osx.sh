@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 COMPONENTS="platform-tools,tools,build-tools-26.0.1,android-26,extra-google-m2repository"
 LICENSES="android-sdk-license-5be876d5|android-sdk-license-c81a61d9"
