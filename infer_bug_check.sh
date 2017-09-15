@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 env
 
 if [[ "$TRAVIS_PULL_REQUEST" == "false" || "$TRAVIS_OS_NAME" == "linux" ]]; then
