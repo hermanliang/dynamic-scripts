@@ -1,4 +1,7 @@
 #!/bin/bash
+
+env
+
 if [[ "$TRAVIS_PULL_REQUEST" == "false" || "$TRAVIS_OS_NAME" == "osx" ]]; then
     exit 0
 fi
