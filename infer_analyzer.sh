@@ -1,6 +1,8 @@
 #!/bin/bash
 
-set -e
+set -ex
+
+env
 
 if [[ "$TRAVIS_PULL_REQUEST" == "true" && "$TRAVIS_OS_NAME" == "osx" ]]; then
     if [ "$CI" == "true" ]; then
