@@ -4,7 +4,7 @@ set -ex
 
 env
 
-if [[ "$TRAVIS_PULL_REQUEST" == "true" && "$TRAVIS_OS_NAME" == "osx" ]]; then
+if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_OS_NAME" == "osx" || -z $CI ]]; then
     if [ "$CI" == "true" ]; then
         echo "git fetch origin develop"
         COMPARE_BRANCH="$TRAVIS_BRANCH"
