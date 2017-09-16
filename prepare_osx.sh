@@ -11,6 +11,6 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
 #     ./android-sdk-installer --install=$COMPONENTS --accept=$LICENSES
     source ~/.android-sdk-installer/env
 
-    brew update
+#     brew update
     brew install infer
 fi
