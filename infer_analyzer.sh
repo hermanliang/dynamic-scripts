@@ -46,9 +46,9 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     FILE_PATH=$INFER_OUT/differential/introduced.json
     INTRO_REPORT=$(cat $FILE_PATH)
     INTRO_REPORT_SIZE=${#INTRO_REPORT}
-    MESSAGE="$CURRENT_BRANCH has introduced issues. Please check slack channel #android_integration."
+    MESSAGE="$CURRENT_BRANCH has introduced issues."
     if [[ $INTRO_REPORT_SIZE -gt "2" ]]; then
-        echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE\033[0m"
+        echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check slack channel #android_integration.\033[0m"
         curl \
             -F file=@${FILE_PATH} \
             -F channels=${CHANNEL} \
