@@ -59,7 +59,6 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     if [ "$CI" == "true" ]; then
         COMPARE_BRANCH="$TRAVIS_BRANCH"
         CURRENT_BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
-        
     else
         SDK_ROOT=$PWD
         COMPARE_BRANCH="develop"
