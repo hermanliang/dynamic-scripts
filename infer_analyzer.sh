@@ -42,19 +42,23 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
 
     CHANNEL=android_integration
     FILE_PATH=$INFER_OUT/differential/introduced.json
-    INTRO_REPORT=$(cat $FILE_PATH)
-    INTRO_REPORT_SIZE=${#INTRO_REPORT}
+    INTRO_REPORT_SIZE=$(wc -c < $FILE_PATH)
     MESSAGE="$CURRENT_BRANCH has introduced issues."
     if [[ $INTRO_REPORT_SIZE -gt "2" ]]; then
-        echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check slack channel #android_integration.\033[0m"
-        curl \
-            -F file=@${FILE_PATH} \
-            -F channels=${CHANNEL} \
-            -F token="${SLACK_TRAVIS_TOKEN}" \
-            -F title="${CURRENT_BRANCH}" \
-            -F initial_comment="${MESSAGE}" \
-            https://slack.com/api/files.upload
-        exit 1
+        if [[ "$CI" == "true" ]]; then
+            echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check slack channel #android_integration.\033[0m"
+            curl \
+                -F file=@${FILE_PATH} \
+                -F channels=${CHANNEL} \
+                -F token="${SLACK_TRAVIS_TOKEN}" \
+                -F title="${CURRENT_BRANCH}" \
+                -F initial_comment="${MESSAGE}" \
+                https://slack.com/api/files.upload
+            exit 1
+        else
+            echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check $FILE_PATH for more detail.\033[0m"
+            exit 1
+        fi
     fi
     echo "No introduced issues"
 fi
