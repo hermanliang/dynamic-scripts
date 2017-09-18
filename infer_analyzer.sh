@@ -50,11 +50,11 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
         if [[ "$CI" == "true" ]]; then
             echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check slack channel #$CHANNEL.\033[0m"
             curl \
-                -F file=@${REPORT_TXT_PATH} \
-                -F channels=${CHANNEL} \
-                -F token=${SLACK_TRAVIS_TOKEN} \
-                -F title=${CURRENT_BRANCH} \
-                -F initial_comment=${MESSAGE} \
+                -F file=@"$REPORT_TXT_PATH" \
+                -F channels="$CHANNEL" \
+                -F token="$SLACK_TRAVIS_TOKEN" \
+                -F title="$CURRENT_BRANCH" \
+                -F initial_comment="$MESSAGE" \
                 https://slack.com/api/files.upload
             exit 1
         else
