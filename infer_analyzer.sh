@@ -2,20 +2,7 @@
 
 set -e
 
-if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_OS_NAME" == "osx" || -z $CI ]]; then
-    if [ "$CI" == "true" ]; then
-        COMPARE_BRANCH="$TRAVIS_BRANCH"
-        CURRENT_BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
-        CHANGED_COUNT=$(git diff --name-only origin/$COMPARE_BRANCH | grep -c -e '.*java')
-        if [[ "$CHANGED_COUNT" == "0" ]]; then
-            echo "No changed java files, ignore INFER analysis"
-            exit 0
-        fi
-    else
-        SDK_ROOT=$PWD
-        COMPARE_BRANCH="develop"
-        CURRENT_BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
-    fi
+function inferAnalyzer {
     INFER_OUT="$SDK_ROOT/infer-out"
     GRADLE_PATH="$SDK_ROOT/android-studio"
 
@@ -44,7 +31,7 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     REPORT_JSON_PATH=$INFER_OUT/differential/introduced.json
     INTRO_REPORT_SIZE=$(wc -c < $REPORT_JSON_PATH)
     MESSAGE="$CURRENT_BRANCH has the introduced issues."
-    if [[ $INTRO_REPORT_SIZE -gt "2" ]]; then
+    if [[ $INTRO_REPORT_SIZE -gt 2 ]]; then
         REPORT_TXT_PATH=$SDK_ROOT/introduced.txt
         infer report --from-json-report $REPORT_JSON_PATH --issues-txt $REPORT_TXT_PATH
         if [[ "$CI" == "true" ]]; then
@@ -66,4 +53,23 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     rm report-current.json
     rm report-compare.json
     echo "No introduced issues"
+}
+
+if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_OS_NAME" == "osx" || -z $CI ]]; then
+    if [ "$CI" == "true" ]; then
+        COMPARE_BRANCH="$TRAVIS_BRANCH"
+        CURRENT_BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
+        
+    else
+        SDK_ROOT=$PWD
+        COMPARE_BRANCH="develop"
+        CURRENT_BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
+    fi
+    CHANGED_COUNT=$(git diff --name-only origin/develop | grep -c '.*java' | cut -d ' ' -f1)
+    if [[ $CHANGED_COUNT -gt 0 ]]; then
+        echo "Start INFER Analyzer"
+        inferAnalyzer
+    else
+        echo "No changed java files, ignore INFER analysis"
+    fi
 fi
