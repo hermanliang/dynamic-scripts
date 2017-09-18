@@ -40,7 +40,7 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     infer reportdiff --report-current report-current.json --report-previous report-compare.json
     git checkout $CURRENT_BRANCH
 
-    CHANNEL=android_integration
+    CHANNEL=android_ci
     REPORT_JSON_PATH=$INFER_OUT/differential/introduced.json
     INTRO_REPORT_SIZE=$(wc -c < $REPORT_JSON_PATH)
     MESSAGE="$CURRENT_BRANCH has introduced issues."
