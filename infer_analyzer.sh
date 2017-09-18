@@ -12,7 +12,7 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
         git fetch origin $COMPARE_BRANCH
         git checkout $CURRENT_BRANCH
     else
-        SDK_ROOT="$PWD"
+        SDK_ROOT=$PWD
         COMPARE_BRANCH="develop"
         CURRENT_BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
     fi
@@ -25,14 +25,14 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     echo "Changed files"
     git diff --name-only origin/$COMPARE_BRANCH > index.txt
     cat index.txt
-    echo "Analyze branch ${CURRENT_BRANCH}"
+    echo "Analyze branch $CURRENT_BRANCH"
     infer capture -- $GRADLE_PATH/gradlew --offline assembleDebug -b $GRADLE_PATH/ce-premium-global/build.gradle
     infer analyze --changed-files-index index.txt
     infer report -q --issues-json report-current.json
 
-    echo "Switch to ${COMPARE_BRANCH}"
+    echo "Switch to $COMPARE_BRANCH"
     git checkout $COMPARE_BRANCH
-    echo "Analyze branch ${COMPARE_BRANCH}"
+    echo "Analyze branch $COMPARE_BRANCH"
     infer capture --reactive -- $GRADLE_PATH/gradlew --offline assembleDebug -b $GRADLE_PATH/ce-premium-global/build.gradle
     infer analyze --reactive --changed-files-index index.txt
     infer report -q --issues-json report-compare.json
@@ -41,24 +41,29 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     git checkout $CURRENT_BRANCH
 
     CHANNEL=android_integration
-    FILE_PATH=$INFER_OUT/differential/introduced.json
-    INTRO_REPORT_SIZE=$(wc -c < $FILE_PATH)
+    REPORT_JSON_PATH=$INFER_OUT/differential/introduced.json
+    INTRO_REPORT_SIZE=$(wc -c < $REPORT_JSON_PATH)
     MESSAGE="$CURRENT_BRANCH has introduced issues."
     if [[ $INTRO_REPORT_SIZE -gt "2" ]]; then
+        REPORT_TXT_PATH=$SDK_ROOT/introduced.txt
+        infer report --from-json-report $REPORT_JSON_PATH --issues-txt $REPORT_TXT_PATH
         if [[ "$CI" == "true" ]]; then
             echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check slack channel #android_integration.\033[0m"
             curl \
-                -F file=@${FILE_PATH} \
-                -F channels=${CHANNEL} \
-                -F token="${SLACK_TRAVIS_TOKEN}" \
-                -F title="${CURRENT_BRANCH}" \
-                -F initial_comment="${MESSAGE}" \
+                -F file=@$REPORT_TXT_PATH \
+                -F channels=$CHANNEL \
+                -F token=$SLACK_TRAVIS_TOKEN \
+                -F title=$CURRENT_BRANCH \
+                -F initial_comment=$MESSAGE \
                 https://slack.com/api/files.upload
             exit 1
         else
-            echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check $FILE_PATH for more detail.\033[0m"
+            echo -e "\033[0;31mFailed:\033[1;33m $MESSAGE Please check $REPORT_TXT_PATH for more detail.\033[0m"
             exit 1
         fi
     fi
+    rm index.txt
+    rm report-current.json
+    rm report-compare.json
     echo "No introduced issues"
 fi
