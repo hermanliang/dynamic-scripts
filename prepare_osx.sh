@@ -2,10 +2,6 @@
 
 set -e
 
-if [ "$CI" == "true" ]; then
-    
-fi
-
 if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_OS_NAME" == "osx" ]]; then
 
     echo "git fetch origin develop"
