@@ -12,13 +12,12 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     git fetch origin $COMPARE_BRANCH
     git checkout $CURRENT_BRANCH
 
-    CHANGED_COUNT=$(git diff --name-only origin/$COMPARE_BRANCH | grep -c -e '.*java')
+    CHANGED_COUNT=$(git diff --name-only origin/develop | grep -c '.*java' | cut -d ' ' -f1)
     if [[ $CHANGED_COUNT -gt 0 ]]; then
         COMPONENTS="platform-tools,build-tools-26.0.1,android-26,extra-google-m2repository"
         LICENSES="android-sdk-license-c81a61d9"
         curl -L https://raw.github.com/embarkmobile/android-sdk-installer/version-2/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS --accept=$LICENSES
         source ~/.android-sdk-installer/env
-
         brew install infer
     else
         echo "No changed java files, ignore configuration"
