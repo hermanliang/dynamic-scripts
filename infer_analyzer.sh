@@ -4,13 +4,13 @@ set -e
 
 if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_OS_NAME" == "osx" || -z $CI ]]; then
     if [ "$CI" == "true" ]; then
-        echo "git fetch origin develop"
         COMPARE_BRANCH="$TRAVIS_BRANCH"
         CURRENT_BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
-        git branch $CURRENT_BRANCH
-        git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-        git fetch origin $COMPARE_BRANCH
-        git checkout $CURRENT_BRANCH
+        CHANGED_COUNT=$(git diff --name-only origin/$COMPARE_BRANCH | grep -c -e '.*java')
+        if [[ "$CHANGED_COUNT" == "0" ]]; then
+            echo "No changed java files, ignore INFER analysis"
+            exit 0
+        fi
     else
         SDK_ROOT=$PWD
         COMPARE_BRANCH="develop"
