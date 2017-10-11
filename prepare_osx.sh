@@ -15,7 +15,7 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
     CHANGED_COUNT=$(git diff --name-only origin/develop | grep -c '.*java' | cut -d ' ' -f1)
     if [[ $CHANGED_COUNT -gt 0 ]]; then
         COMPONENTS="platform-tools,build-tools-26.0.1,android-26,extra-google-m2repository"
-        LICENSES="android-sdk-license-c81a61d9"
+        LICENSES="android-sdk-license-c81a61d9|android-sdk-license-2742d1c5"
         curl -L https://raw.github.com/embarkmobile/android-sdk-installer/version-2/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS --accept=$LICENSES
         source ~/.android-sdk-installer/env
         HOMEBREW_NO_AUTO_UPDATE=1 brew install infer
