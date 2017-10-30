@@ -4,6 +4,7 @@ set -e
 
 if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAVIS_OS_NAME" == "osx" ]]; then
 
+    rvm use ruby-2.4.1
     echo "git fetch origin develop"
     COMPARE_BRANCH="$TRAVIS_BRANCH"
     CURRENT_BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
