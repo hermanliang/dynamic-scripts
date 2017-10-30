@@ -18,7 +18,6 @@ if [[ ! -z "$TRAVIS_PULL_REQUEST" && "$TRAVIS_PULL_REQUEST" != "false" && "$TRAV
         LICENSES="android-sdk-license-c81a61d9|android-sdk-license-2742d1c5"
         curl -L https://raw.github.com/embarkmobile/android-sdk-installer/version-2/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS --accept=$LICENSES
         source ~/.android-sdk-installer/env
-        brew update # remove after 25 Oct, 2017
         brew install infer
     else
         echo "No changed java files, ignore configuration"
