@@ -15,14 +15,14 @@ function inferAnalyzer {
     echo "Analyze branch $CURRENT_BRANCH"
     infer capture -- $GRADLE_PATH/gradlew --offline assembleDebug -b $GRADLE_PATH/ce-premium-global/build.gradle
     infer analyze --changed-files-index index.txt
-    infer report -q --issues-json report-current.json
+    cp $INFER_OUT/report.json report-current.json
 
     echo "Switch to $COMPARE_BRANCH"
     git checkout $COMPARE_BRANCH
     echo "Analyze branch $COMPARE_BRANCH"
     infer capture --reactive -- $GRADLE_PATH/gradlew --offline assembleDebug -b $GRADLE_PATH/ce-premium-global/build.gradle
     infer analyze --reactive --changed-files-index index.txt
-    infer report -q --issues-json report-compare.json
+    cp $INFER_OUT/report.json report-compare.json
     echo "Comparing..."
     infer reportdiff --report-current report-current.json --report-previous report-compare.json
     git checkout $CURRENT_BRANCH
