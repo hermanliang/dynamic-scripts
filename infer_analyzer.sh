@@ -27,7 +27,7 @@ function inferAnalyzer {
     infer reportdiff --report-current report-current.json --report-previous report-compare.json
     git checkout $CURRENT_BRANCH
 
-    CHANNEL=android_ci
+    CHANNEL=ci-android
     REPORT_JSON_PATH=$INFER_OUT/differential/introduced.json
     INTRO_REPORT_SIZE=$(wc -c < $REPORT_JSON_PATH)
     MESSAGE="$CURRENT_BRANCH has the introduced issues."
